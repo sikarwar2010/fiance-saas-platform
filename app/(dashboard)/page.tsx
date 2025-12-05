@@ -1,13 +1,24 @@
-import { UserButton } from "@clerk/nextjs";
-import Link from "next/link";
+"use client";
 
+import { Loader2 } from "lucide-react";
+
+import { useGetAccounts } from "@/features/accounts/api/use-get-accounts";
 
 export default function Home() {
-	return (
-		<div className="flex flex-col items-center justify-center h-screen">
-			<h1 className="text-4xl font-bold">Dashboard</h1>
-			<UserButton />
-			<Link href="/dashboard">Dashboard</Link>
-		</div>
-	);
+    const { data: accounts, isLoading } = useGetAccounts();
+
+    if (isLoading)
+        return (
+            <div>
+                <Loader2 />
+            </div>
+        );
+
+    return (
+        <div>
+            {accounts?.map((account) => (
+                <div key={account.id}>{account.name}</div>
+            ))}
+        </div>
+    );
 }
